@@ -4,15 +4,20 @@
 
 > What do you think are the greatest areas of risk in completing the project?
 
--
+- From a planning perspective - the ambiguities in the design could lead to time lost "pushing pixels around". It will be benificial to spend time upfront getting clear on the design system, as well as the various component states.
+
+- From a technical perspective - since the search field doesn't have a button, I am assuming that the query parameters are to be updated as the user types. Because of this, we'll want to make sure to debounce the network call.
 
 > What changes/additions would you make to the design?
 
--
+- Having designs for error, loading, and empty states would be a bonus. Also, it would be nice if there was a bigger distinciton between open and closed issue cards.
 
 > List a two or three features that you would consider implementing in the future that would add significant value to the project.
 
--
+- Authentication
+- Add information about the repository
+- A separate view for indivial issues where auth'd users can comment / react
+- A way to create new issues directly from the dashboard
 
 ---
 
