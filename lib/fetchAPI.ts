@@ -1,4 +1,4 @@
-export interface IFetchOptions {
+interface IFetchOptions {
   method?: "GET" | "POST";
   headers?: Headers | { [key: string]: string };
   body?: BodyInit;
@@ -23,9 +23,9 @@ export async function fetchAPI<T>(url: string, options: IFetchOptions = {}): Pro
   };
 
   const response: Response = await fetch(url, mergedOptions);
-
+  
   if (!response.ok) {
-    return { error: response.status } as T;
+    return { error: response.status } as unknown as T;
   }
 
   return await response.json();

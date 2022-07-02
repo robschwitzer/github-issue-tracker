@@ -1,14 +1,15 @@
-import React from "react";
 import Image from "next/image";
 
 import closeIcon from "assets/icons/close.svg";
+
+import type { FilterBy } from "pages/[...slug]"
 
 interface Props {
   onClick: Function;
   selectedItem: string;
 }
 
-const ISSUE_STATES = [
+const ISSUE_STATES: { label: string; state: FilterBy }[] = [
   { label: "All Issues", state: "all" },
   { label: "Open Issues", state: "open" },
   { label: "Closed Issues", state: "closed" },
@@ -25,7 +26,7 @@ function FilterBar({ onClick, selectedItem }: Props) {
         textDecoration: item.state === selectedItem ? "underline" : "none",
       }}
     >
-      <a href="#">{item.label}</a>
+      <a href={`#${item.state}`}>{item.label}</a>
     </li>
   ));
 
