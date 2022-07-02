@@ -1,9 +1,9 @@
-import React, { useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 
-import PageHeader from "components/PageHeader";
 import FilterBar from "components/FilterBar";
 import Issues from "components/Issues";
+import HeaderContext, { IHeaderContext } from "context/headerContext";
 import { fetchAPI } from "lib/fetchAPI";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
@@ -18,12 +18,31 @@ interface Props {
   owner: GithubUser;
 }
 
+export type FilterBy = GithubIssue["state"] | "all" | "pr";
+
 const baseUrl: string = "https://api.github.com/repos";
 
 function IssuesPage(props: Props) {
-  const [filterBy, setFilterBy] = useState<GithubIssue["state"] | "all" | "pr">(
+  const { setHeaderConfig } = useContext<IHeaderContext>(HeaderContext);
+  const [filterBy, setFilterBy] = useState<FilterBy>(
     "all"
   );
+
+  useEffect(() => {
+    if (window.location.hash) {
+      /* filter on load if hash is present */
+      setFilterBy(window.location.hash.substring(1) as FilterBy)
+    }
+  }, []);
+
+  useEffect(() => {
+    if (setHeaderConfig) {
+      setHeaderConfig({
+        logo: props.owner?.avatar_url,
+        url: props.html_url
+      })
+    }
+  }, [props.html_url, props.owner]);
 
   const issues: GithubIssue[] = useMemo(() => {
     return props.issues?.filter((issue) => {
@@ -35,13 +54,12 @@ function IssuesPage(props: Props) {
   }, [filterBy, props.issues]);
 
   return (
-    <div className={`flex flex-col w-full min-h-screen h-full`}>
+    <div className={`flex flex-col w-full h-full`}>
       <Head>
         <title>{`Issues ${
           props.owner?.login ? `- ${props.owner.login}/${props.name ?? ""}` : ""
         }`}</title>
       </Head>
-      <PageHeader url={props.html_url} logo={props.owner?.avatar_url} />
       <FilterBar onClick={setFilterBy} selectedItem={filterBy} />
       <Issues issues={issues} />
     </div>
