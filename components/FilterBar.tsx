@@ -19,20 +19,20 @@ function FilterBar({ onClick, selectedItem }: Props) {
   const listItems = ISSUE_STATES.map((item) => (
     <li
       key={item.label}
-      className="whitespace-nowrap text-xs md:text-sm mr-4 cursor-pointer"
+      className="whitespace-nowrap text-xs md:text-base mr-4 cursor-pointer hover:scale-105 transition-transform"
       onClick={() => onClick(item.state)}
       style={{
         textDecoration: item.state === selectedItem ? "underline" : "none",
       }}
     >
-      {item.label}
+      <a href="#">{item.label}</a>
     </li>
   ));
 
   return (
     <div className="flex flex-row justify-between mb-8">
       <ul className="flex flex-row">{listItems}</ul>
-      <a className="relative h-6 w-6 cursor-pointer" href="/">
+      <a className="relative h-6 w-6 cursor-pointer hover:scale-105 transition-transform" href="/">
         <Image src={closeIcon} layout="fill" />
       </a>
     </div>
