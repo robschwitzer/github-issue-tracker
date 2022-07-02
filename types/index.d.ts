@@ -52,7 +52,7 @@ export interface GithubRepo {
   contributors_url: string;
   deployments_url: string;
   downloads_url: string;
-  error?: { code: number }; // not in api response, added by fetch api error block
+  error?: number; // status code. not in api response, added by fetch api error block
   events_url: string;
   forks_url: string;
   git_commits_url: string;
