@@ -18,14 +18,14 @@ const SearchField = forwardRef(
   ) => {
     return (
       <div className="flex flex-col h-16 md:h-24 w-11/12 md:w-2/3 ">
-        <div className="flex flex-row border-2 border-stone-900 rounded-md p-4 items-center justify-between">
+        <div className="flex flex-row border-2 bg-sky-100 border-stone-900 rounded-md p-4 items-center justify-between">
           <div className="flex flex-row w-full items-center">
             <div className="relative h-8 md:h-12 w-8 md:w-12">
               <Image src={searchIcon} layout="fill" />
             </div>
             <input
               autoFocus
-              className="border-none outline-none text:sm md:text-xl ml-4 w-full h-full"
+              className="border-none outline-none bg-sky-100 text:sm md:text-xl ml-4 w-full h-full"
               placeholder="Paste a link to a GitHub repo"
               onChange={onChange}
               ref={ref}
