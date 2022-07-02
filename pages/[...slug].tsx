@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 
 import PageHeader from "components/PageHeader";
 import FilterBar from "components/FilterBar";
+import Issues from "components/Issues";
 import { fetchAPI } from "lib/fetchAPI";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
@@ -36,6 +37,7 @@ function IssuesPage(props: Props) {
     >
       <PageHeader url={props.html_url} />
       <FilterBar onClick={setFilterBy} selectedItem={filterBy} />
+      <Issues issues={issues} />
     </div>
   );
 }
