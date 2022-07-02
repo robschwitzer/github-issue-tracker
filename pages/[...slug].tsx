@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import Head from "next/head";
 
 import PageHeader from "components/PageHeader";
 import FilterBar from "components/FilterBar";
@@ -6,13 +7,15 @@ import Issues from "components/Issues";
 import { fetchAPI } from "lib/fetchAPI";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
-import type { GithubRepo, GithubIssue } from "types";
+import type { GithubRepo, GithubIssue, GithubUser } from "types";
 
 interface Props {
   has_issues: GithubRepo["has_issues"];
   html_url: GithubRepo["html_url"];
-  open_issue_count: GithubRepo["open_issues_count"];
   issues: GithubIssue[];
+  name: string;
+  open_issue_count: GithubRepo["open_issues_count"];
+  owner: GithubUser;
 }
 
 const baseUrl: string = "https://api.github.com/repos";
@@ -32,10 +35,13 @@ function IssuesPage(props: Props) {
   }, [filterBy, props.issues]);
 
   return (
-    <div
-      className={`flex flex-col w-full min-h-screen h-full p-6`}
-    >
-      <PageHeader url={props.html_url} />
+    <div className={`flex flex-col w-full min-h-screen h-full`}>
+      <Head>
+        <title>{`Issues ${
+          props.owner?.login ? `- ${props.owner.login}/${props.name ?? ""}` : ""
+        }`}</title>
+      </Head>
+      <PageHeader url={props.html_url} logo={props.owner?.avatar_url} />
       <FilterBar onClick={setFilterBy} selectedItem={filterBy} />
       <Issues issues={issues} />
     </div>
@@ -53,7 +59,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const slug = params?.slug as string[];
-  const [{ has_issues, open_issues_count, html_url }, issues] =
+  const [{ has_issues, open_issues_count, html_url, name, owner }, issues] =
     await Promise.all([
       fetchAPI<GithubRepo>(`${baseUrl}/${slug.join("/")}`),
       fetchAPI<GithubIssue[]>(`${baseUrl}/${slug.join("/")}/issues`),
@@ -63,8 +69,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       has_issues,
       html_url,
-      open_issues_count,
       issues,
+      name,
+      open_issues_count,
+      owner,
     },
     revalidate: 1000,
   };
