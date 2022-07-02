@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 
 import PageHeader from "components/PageHeader";
+import FilterBar from "components/FilterBar";
 import { fetchAPI } from "lib/fetchAPI";
 
 import type { GetStaticProps, GetStaticPaths } from "next";
@@ -16,11 +17,25 @@ interface Props {
 const baseUrl: string = "https://api.github.com/repos";
 
 function IssuesPage(props: Props) {
+  const [filterBy, setFilterBy] = useState<GithubIssue["state"] | "all" | "pr">(
+    "all"
+  );
+
+  const issues: GithubIssue[] = useMemo(() => {
+    return props.issues?.filter((issue) => {
+      if (filterBy === "open") return issue.state === "open";
+      if (filterBy === "closed") return issue.state === "closed";
+      if (filterBy === "pr") return issue.pull_request;
+      return issue;
+    });
+  }, [filterBy, props.issues]);
+
   return (
     <div
       className={`flex flex-col w-full min-h-screen h-full p-6`}
     >
       <PageHeader url={props.html_url} />
+      <FilterBar onClick={setFilterBy} selectedItem={filterBy} />
     </div>
   );
 }
