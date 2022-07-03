@@ -61,7 +61,7 @@ function IssuesPage(props: Props) {
         }`}</title>
       </Head>
       <FilterBar onClick={setFilterBy} selectedItem={filterBy} />
-      <Issues issues={issues} />
+      <Issues issues={issues} url={props.html_url} />
     </div>
   );
 }
